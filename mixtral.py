@@ -100,4 +100,5 @@ if __name__ == "__main__":
 	# start server
 	server.add_insecure_port("[::]:50051")
 	server.start()
+	print("Server started")
 	server.wait_for_termination()
