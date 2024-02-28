@@ -14,8 +14,18 @@ class CallLLMStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Call = channel.unary_unary(
-                '/CallLLM/Call',
+        self.Plain = channel.unary_unary(
+                '/CallLLM/Plain',
+                request_serializer=mixtral__pb2.Request.SerializeToString,
+                response_deserializer=mixtral__pb2.Response.FromString,
+                )
+        self.ExplainWord = channel.unary_unary(
+                '/CallLLM/ExplainWord',
+                request_serializer=mixtral__pb2.Request.SerializeToString,
+                response_deserializer=mixtral__pb2.Response.FromString,
+                )
+        self.Summarize = channel.unary_unary(
+                '/CallLLM/Summarize',
                 request_serializer=mixtral__pb2.Request.SerializeToString,
                 response_deserializer=mixtral__pb2.Response.FromString,
                 )
@@ -24,7 +34,19 @@ class CallLLMStub(object):
 class CallLLMServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Call(self, request, context):
+    def Plain(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ExplainWord(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Summarize(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -33,8 +55,18 @@ class CallLLMServicer(object):
 
 def add_CallLLMServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Call': grpc.unary_unary_rpc_method_handler(
-                    servicer.Call,
+            'Plain': grpc.unary_unary_rpc_method_handler(
+                    servicer.Plain,
+                    request_deserializer=mixtral__pb2.Request.FromString,
+                    response_serializer=mixtral__pb2.Response.SerializeToString,
+            ),
+            'ExplainWord': grpc.unary_unary_rpc_method_handler(
+                    servicer.ExplainWord,
+                    request_deserializer=mixtral__pb2.Request.FromString,
+                    response_serializer=mixtral__pb2.Response.SerializeToString,
+            ),
+            'Summarize': grpc.unary_unary_rpc_method_handler(
+                    servicer.Summarize,
                     request_deserializer=mixtral__pb2.Request.FromString,
                     response_serializer=mixtral__pb2.Response.SerializeToString,
             ),
@@ -49,7 +81,7 @@ class CallLLM(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Call(request,
+    def Plain(request,
             target,
             options=(),
             channel_credentials=None,
@@ -59,7 +91,41 @@ class CallLLM(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/CallLLM/Call',
+        return grpc.experimental.unary_unary(request, target, '/CallLLM/Plain',
+            mixtral__pb2.Request.SerializeToString,
+            mixtral__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ExplainWord(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/CallLLM/ExplainWord',
+            mixtral__pb2.Request.SerializeToString,
+            mixtral__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Summarize(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/CallLLM/Summarize',
             mixtral__pb2.Request.SerializeToString,
             mixtral__pb2.Response.FromString,
             options, channel_credentials,

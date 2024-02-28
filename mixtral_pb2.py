@@ -14,19 +14,19 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmixtral.proto\"o\n\x07Request\x12\r\n\x05query\x18\x01 \x01(\t\x12\x18\n\x04type\x18\x02 \x01(\x0e\x32\x05.TypeH\x00\x88\x01\x01\x12\x17\n\nmax_tokens\x18\x03 \x01(\x05H\x01\x88\x01\x01\x12\n\n\x02id\x18\x04 \x01(\x05\x42\x07\n\x05_typeB\r\n\x0b_max_tokens\"7\n\x08Response\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05query\x18\x02 \x01(\t\x12\x10\n\x08response\x18\x03 \x01(\t*+\n\x04Type\x12\x0e\n\nTYPE_PLAIN\x10\x00\x12\x13\n\x0fTYPE_DICTIONARY\x10\x01\x32(\n\x07\x43\x61llLLM\x12\x1d\n\x04\x43\x61ll\x12\x08.Request\x1a\t.Response\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmixtral.proto\"+\n\x02Id\x12\x14\n\x0c\x63onversation\x18\x01 \x01(\x05\x12\x0f\n\x07message\x18\x02 \x01(\x05\"Q\n\x07Request\x12\x0f\n\x02id\x18\x01 \x01(\x0b\x32\x03.Id\x12\r\n\x05query\x18\x02 \x01(\t\x12\x17\n\nmax_tokens\x18\x03 \x01(\x05H\x00\x88\x01\x01\x42\r\n\x0b_max_tokens\"<\n\x08Response\x12\x0f\n\x02id\x18\x01 \x01(\x0b\x32\x03.Id\x12\r\n\x05query\x18\x02 \x01(\t\x12\x10\n\x08response\x18\x03 \x01(\t2s\n\x07\x43\x61llLLM\x12\x1e\n\x05Plain\x12\x08.Request\x1a\t.Response\"\x00\x12$\n\x0b\x45xplainWord\x12\x08.Request\x1a\t.Response\"\x00\x12\"\n\tSummarize\x12\x08.Request\x1a\t.Response\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'mixtral_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_TYPE']._serialized_start=187
-  _globals['_TYPE']._serialized_end=230
-  _globals['_REQUEST']._serialized_start=17
-  _globals['_REQUEST']._serialized_end=128
-  _globals['_RESPONSE']._serialized_start=130
-  _globals['_RESPONSE']._serialized_end=185
-  _globals['_CALLLLM']._serialized_start=232
-  _globals['_CALLLLM']._serialized_end=272
+  _globals['_ID']._serialized_start=17
+  _globals['_ID']._serialized_end=60
+  _globals['_REQUEST']._serialized_start=62
+  _globals['_REQUEST']._serialized_end=143
+  _globals['_RESPONSE']._serialized_start=145
+  _globals['_RESPONSE']._serialized_end=205
+  _globals['_CALLLLM']._serialized_start=207
+  _globals['_CALLLLM']._serialized_end=322
 # @@protoc_insertion_point(module_scope)

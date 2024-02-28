@@ -1,35 +1,33 @@
-from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
+from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-class Type(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
-    __slots__ = ()
-    TYPE_PLAIN: _ClassVar[Type]
-    TYPE_DICTIONARY: _ClassVar[Type]
-TYPE_PLAIN: Type
-TYPE_DICTIONARY: Type
+class Id(_message.Message):
+    __slots__ = ("conversation", "message")
+    CONVERSATION_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    conversation: int
+    message: int
+    def __init__(self, conversation: _Optional[int] = ..., message: _Optional[int] = ...) -> None: ...
 
 class Request(_message.Message):
-    __slots__ = ("query", "type", "max_tokens", "id")
-    QUERY_FIELD_NUMBER: _ClassVar[int]
-    TYPE_FIELD_NUMBER: _ClassVar[int]
-    MAX_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("id", "query", "max_tokens")
     ID_FIELD_NUMBER: _ClassVar[int]
+    QUERY_FIELD_NUMBER: _ClassVar[int]
+    MAX_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    id: Id
     query: str
-    type: Type
     max_tokens: int
-    id: int
-    def __init__(self, query: _Optional[str] = ..., type: _Optional[_Union[Type, str]] = ..., max_tokens: _Optional[int] = ..., id: _Optional[int] = ...) -> None: ...
+    def __init__(self, id: _Optional[_Union[Id, _Mapping]] = ..., query: _Optional[str] = ..., max_tokens: _Optional[int] = ...) -> None: ...
 
 class Response(_message.Message):
     __slots__ = ("id", "query", "response")
     ID_FIELD_NUMBER: _ClassVar[int]
     QUERY_FIELD_NUMBER: _ClassVar[int]
     RESPONSE_FIELD_NUMBER: _ClassVar[int]
-    id: int
+    id: Id
     query: str
     response: str
-    def __init__(self, id: _Optional[int] = ..., query: _Optional[str] = ..., response: _Optional[str] = ...) -> None: ...
+    def __init__(self, id: _Optional[_Union[Id, _Mapping]] = ..., query: _Optional[str] = ..., response: _Optional[str] = ...) -> None: ...

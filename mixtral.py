@@ -33,16 +33,20 @@ Beispiele:
 [3] Sie schaut im Fernsehprogramm nach, welche Filme abends laufen.
 [3] Unglaublich viele Flexionen kann man detailliert im Wiktionary nachschauen.
 [4] Sollen wir vor dem Urlaub das Auto noch in der Werkstatt nachschauen lassen?
-</s>
+</s> 
+
 """
 
-def makePrompt(query, type = grpc_types.TYPE_PLAIN):
-	match type:
-		case grpc_types.TYPE_PLAIN:
-			return f"[INST] {query} [/INST]"
-		case grpc_types.TYPE_DICTIONARY:
-			return f"{dict_instructions} [INST] {query} [/INST]"
+summary_instructions = """Summarize
+<s> [INST] The global tech industry has seen a significant shift towards green technology in recent years. Companies are investing heavily in renewable energy sources, such as solar and wind power, to reduce their carbon footprint. This trend is driven by increasing awareness of climate change and the need for sustainable development. Major tech giants have announced plans to become carbon neutral within the next decade. Initiatives include improving energy efficiency in data centers, using recycled materials in products, and investing in environmental restoration projects. Governments around the world are also supporting this shift by offering tax incentives and subsidies for green technology investments. Despite these positive steps, challenges remain, including the high initial cost of transitioning to green technology and the need for more widespread consumer adoption. However, the long-term benefits, including reduced environmental impact and lower operational costs, make this a worthwhile investment for the tech industry.[/INST]
+The global tech industry is rapidly embracing green technology, driven by the goal of reducing carbon emissions and achieving sustainability. Despite challenges like high initial costs, the move is supported by government incentives and promises long-term environmental and economic benefits.
+</s>
 
+"""
+
+
+def wrapPrompt(query):
+	return f"[INST] {query} [/INST]"
 
 def runLLM(prompt, max_tokens):
 
@@ -71,14 +75,29 @@ def runLLM(prompt, max_tokens):
 
 
 class LLMCaller(grpc_services.CallLLM):
-	def Call(self, request, context):
-		logging.info(f"======================== got request: {request} ========================")
+	def Plain(self, request, context):
+		logging.info(f"======================== plain request: {request} ========================")
 		return grpc_types.Response(
 			id = request.id,
 			query = request.query,
-			response = runLLM(makePrompt(request.query, request.type), request.max_tokens)
+			response = runLLM(wrapPrompt(request.query), request.max_tokens)
 		)
 
+	def ExplainWord(self, request, context):
+		logging.info(f"======================== explainWord request: {request} ========================")
+		return grpc_types.Response(
+			id = request.id,
+			query = request.query,
+			response = runLLM(dict_instructions + wrapPrompt(request.query), request.max_tokens)
+		)
+
+	def Summarize(self, request, context):
+		logging.info(f"======================== summary request: {request} ========================")
+		return grpc_types.Response(
+			id = request.id,
+			query = request.query,
+			response = runLLM(summary_instructions + wrapPrompt(request.query), request.max_tokens)
+		)
 
 if __name__ == "__main__":
 	logging.basicConfig(level=logging.INFO)

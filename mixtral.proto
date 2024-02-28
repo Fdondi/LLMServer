@@ -1,23 +1,24 @@
 syntax = "proto3";
 
-enum Type {
-  TYPE_PLAIN = 0;
-  TYPE_DICTIONARY = 1;
+message Id {
+	int32 conversation = 1;
+	int32 message = 2;
 }
 
 message Request {
-  string query = 1;
-  optional Type type = 2;
+  Id id = 1;
+  string query = 2;
   optional int32 max_tokens = 3;
-  int32 id = 4;
 }
 
 message Response {
-  int32 id = 1;
+  Id id = 1;
   string query = 2;
   string response = 3;
 }
 
 service CallLLM{
-  rpc Call (Request) returns (Response) {}
+  rpc Plain (Request) returns (Response) {}
+  rpc ExplainWord (Request) returns (Response) {}
+  rpc Summarize (Request) returns (Response) {}
 }
