@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+enum Type {
+  TYPE_PLAIN = 0;
+  TYPE_DICTIONARY = 1;
+}
+
+message Request {
+  string query = 1;
+  optional Type type = 2;
+  optional int32 max_tokens = 3;
+  int32 id = 4;
+}
+
+message Response {
+  int32 id = 1;
+  string query = 2;
+  string response = 3;
+}
+
+service CallLLM{
+  rpc Call (Request) returns (Response) {}
+}
