@@ -8,7 +8,7 @@ message Id {
 message Request {
   Id id = 1;
   string query = 2;
-  optional int32 max_tokens = 3;
+  optional int32 max_tokens = 3  [deprecated=true];
 }
 
 message Response {

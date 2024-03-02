@@ -17,7 +17,7 @@ class LLMCaller(grpc_services.CallLLM):
 		return grpc_types.Response(
 			id = request.id,
 			query = request.query,
-			response = call_plain(request.query, request.max_tokens)
+			response = call_plain(request.query)
 		)
 
 	def ExplainWord(self, request, context):
@@ -25,7 +25,7 @@ class LLMCaller(grpc_services.CallLLM):
 		return grpc_types.Response(
 			id = request.id,
 			query = request.query,
-			response = call_explain(request.query, request.max_tokens)
+			response = call_explain(request.query)
 		)
 
 	def Summarize(self, request, context):
@@ -33,7 +33,7 @@ class LLMCaller(grpc_services.CallLLM):
 		return grpc_types.Response(
 			id = request.id,
 			query = request.query,
-			response = call_explain(request.query, request.max_tokens)
+			response = call_explain(request.query)
 		)
 
 if __name__ == "__main__":

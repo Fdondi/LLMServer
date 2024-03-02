@@ -39,10 +39,7 @@ def wrapPrompt(query):
 	sanitized_query = escape(query)
 	return f"[INST] {sanitized_query} [/INST]"
 
-def runLLM(prompt, max_tokens):
-
-	if max_tokens == 0:
-		max_tokens = 10000
+def runLLM(prompt):
 
 	# Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
 	llm = Llama(
@@ -55,7 +52,7 @@ def runLLM(prompt, max_tokens):
 	# Simple inference example
 	output = llm(
   		prompt, # Prompt
-  		max_tokens=max_tokens,  # Generate up to 10000 tokens
+  		max_tokens=10000,  # Generate up to 10000 tokens
   		stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
   		echo=True        # Whether to echo the prompt
 	)
@@ -63,11 +60,11 @@ def runLLM(prompt, max_tokens):
 	end_instruction_marker = "[/INST]"
 	return raw_output[raw_output.rindex(end_instruction_marker)+len(end_instruction_marker):]
 
-def call_plain(query, max_tokens):
-	return runLLM(wrapPrompt(query), max_tokens)
+def call_plain(query):
+	return runLLM(wrapPrompt(query))
 
-def call_explain(query, max_tokens):
-	return runLLM(dict_instructions + wrapPrompt(query), max_tokens)
+def call_explain(query):
+	return runLLM(dict_instructions + wrapPrompt(query))
 
-def call_summary(query, max_tokens):
-	return runLLM(summary_instructions + wrapPrompt(query), max_tokens)
+def call_summary(query):
+	return runLLM(summary_instructions + wrapPrompt(query))
