@@ -1,18 +1,6 @@
-import mixtral_pb2 as grpc_types, mixtral_pb2_grpc as grpc_services
-
-import grpc
-from grpc_health.v1 import health
-from grpc_health.v1 import health_pb2
-from grpc_health.v1 import health_pb2_grpc
-from grpc_reflection.v1alpha import reflection
-
 from html import escape
 
-import logging
-
 from llama_cpp import Llama
-
-from concurrent.futures import ThreadPoolExecutor
 
 dict_instructions="""Premise:
 You are Deutsches Wörterbuch, a comprehensive German dictionary designed to adapt its explanations to various levels of German language proficiency, from A1 (beginner) to C2 (native).
@@ -75,52 +63,11 @@ def runLLM(prompt, max_tokens):
 	end_instruction_marker = "[/INST]"
 	return raw_output[raw_output.rindex(end_instruction_marker)+len(end_instruction_marker):]
 
+def call_plain(query, max_tokens):
+	return runLLM(wrapPrompt(query), max_tokens)
 
+def call_explain(query, max_tokens):
+	return runLLM(dict_instructions + wrapPrompt(query), max_tokens)
 
-class LLMCaller(grpc_services.CallLLM):
-	def Plain(self, request, context):
-		logging.info(f"======================== plain request: {request} ========================")
-		return grpc_types.Response(
-			id = request.id,
-			query = request.query,
-			response = runLLM(wrapPrompt(request.query), request.max_tokens)
-		)
-
-	def ExplainWord(self, request, context):
-		logging.info(f"======================== explainWord request: {request} ========================")
-		return grpc_types.Response(
-			id = request.id,
-			query = request.query,
-			response = runLLM(dict_instructions + wrapPrompt(request.query), request.max_tokens)
-		)
-
-	def Summarize(self, request, context):
-		logging.info(f"======================== summary request: {request} ========================")
-		return grpc_types.Response(
-			id = request.id,
-			query = request.query,
-			response = runLLM(summary_instructions + wrapPrompt(request.query), request.max_tokens)
-		)
-
-if __name__ == "__main__":
-	logging.basicConfig(level=logging.INFO)
-	server = grpc.server(ThreadPoolExecutor(max_workers=10))
-	grpc_services.add_CallLLMServicer_to_server(LLMCaller(), server)
-	# add health check
-	health_servicer = health.HealthServicer(
-		experimental_non_blocking=True,
-		experimental_thread_pool=ThreadPoolExecutor(max_workers=10),
-	)
-	health_pb2_grpc.add_HealthServicer_to_server(health_servicer, server)
-	# add reflection
-	SERVICE_NAMES = (
-		grpc_types.DESCRIPTOR.services_by_name['CallLLM'].full_name,
-		reflection.SERVICE_NAME,
-	)
-	reflection.enable_server_reflection(SERVICE_NAMES, server)
-
-	# start server
-	server.add_insecure_port("[::]:50051")
-	server.start()
-	print("Server started")
-	server.wait_for_termination()
+def call_summary(query, max_tokens):
+	return runLLM(summary_instructions + wrapPrompt(query), max_tokens)
