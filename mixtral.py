@@ -6,6 +6,8 @@ from grpc_health.v1 import health_pb2
 from grpc_health.v1 import health_pb2_grpc
 from grpc_reflection.v1alpha import reflection
 
+from html import escape
+
 import logging
 
 from llama_cpp import Llama
@@ -46,7 +48,8 @@ The global tech industry is rapidly embracing green technology, driven by the go
 
 
 def wrapPrompt(query):
-	return f"[INST] {query} [/INST]"
+	sanitized_query = escape(query)
+	return f"[INST] {sanitized_query} [/INST]"
 
 def runLLM(prompt, max_tokens):
 
